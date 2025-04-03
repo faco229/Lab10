@@ -5,98 +5,74 @@ import folium
 from folium.plugins import MarkerCluster
 from streamlit_folium import st_folium
 import matplotlib.pyplot as plt
-import os
 
-st.title("Water Quality Analysis App")
+st.set_page_config(layout="wide")
+st.title("Water Quality Explorer")
 
-# === Load CSV Files ===
-try:
-    station_df = pd.read_csv("station.csv")
-    results_df = pd.read_csv("narrowresult.csv")
-except FileNotFoundError as e:
-    st.error(f"File not found: {e}")
-    st.stop()
+# Upload files
+st.sidebar.header("Upload Files")
+station_file = st.sidebar.file_uploader("Upload station.csv", type="csv")
+results_file = st.sidebar.file_uploader("Upload narrowresult.csv", type="csv")
 
-# === Validate Data ===
-results_df['ResultMeasureValue'] = pd.to_numeric(results_df['ResultMeasureValue'], errors='coerce')
-results_df['ActivityStartDate'] = pd.to_datetime(results_df['ActivityStartDate'], errors='coerce')
-valid_results_df = results_df.dropna(subset=["ResultMeasureValue", "ActivityStartDate"])
+if station_file and results_file:
+    # Load data
+    station_df = pd.read_csv(station_file)
+    results_df = pd.read_csv(results_file)
 
-# === Station Coordinates (Dummy for Demo) ===
-stations = station_df[['MonitoringLocationIdentifier', 'MonitoringLocationName']].drop_duplicates()
-np.random.seed(42)
-stations['Latitude'] = np.random.uniform(36.5, 39.0, len(stations))
-stations['Longitude'] = np.random.uniform(-89.5, -84.5, len(stations))
+    # Clean data
+    results_df['ResultMeasureValue'] = pd.to_numeric(results_df['ResultMeasureValue'], errors='coerce')
+    results_df['ActivityStartDate'] = pd.to_datetime(results_df['ActivityStartDate'], errors='coerce')
+    valid_df = results_df.dropna(subset=["ResultMeasureValue", "ActivityStartDate", "CharacteristicName"])
 
-# === Contaminant Selection ===
-contaminants = sorted(valid_results_df['CharacteristicName'].dropna().unique())
-selected_contaminants = st.multiselect("Select up to 2 contaminants:", contaminants, max_selections=2)
+    # Generate dummy coordinates for mapping (real lat/lon not provided)
+    stations = station_df[['MonitoringLocationIdentifier', 'MonitoringLocationName']].drop_duplicates()
+    np.random.seed(42)
+    stations['Latitude'] = np.random.uniform(36.5, 39.0, len(stations))
+    stations['Longitude'] = np.random.uniform(-89.5, -84.5, len(stations))
 
-# === Date Range Selection ===
-min_date = valid_results_df['ActivityStartDate'].min()
-max_date = valid_results_df['ActivityStartDate'].max()
-date_range = st.date_input("Select date range:", [min_date, max_date])
+    # Sidebar filters
+    st.sidebar.header("Filter Data")
+    contaminants = sorted(valid_df['CharacteristicName'].dropna().unique())
+    selected_contaminant = st.sidebar.selectbox("Select a contaminant:", contaminants)
 
-# === Value Range Slider ===
-if not valid_results_df['ResultMeasureValue'].dropna().empty:
-    value_min = float(valid_results_df['ResultMeasureValue'].min())
-    value_max = float(valid_results_df['ResultMeasureValue'].max())
-else:
-    value_min, value_max = 0.0, 100.0
+    subset = valid_df[valid_df["CharacteristicName"] == selected_contaminant]
 
-value_range = st.slider("Select value range:", value_min, value_max, (value_min, value_max))
+    # Date and value sliders
+    date_min = subset["ActivityStartDate"].min()
+    date_max = subset["ActivityStartDate"].max()
+    value_min = float(subset["ResultMeasureValue"].min())
+    value_max = float(subset["ResultMeasureValue"].max())
 
-# === Filter the Data ===
-filtered = valid_results_df[
-    valid_results_df['CharacteristicName'].isin(selected_contaminants) &
-    (valid_results_df['ActivityStartDate'] >= pd.to_datetime(date_range[0])) &
-    (valid_results_df['ActivityStartDate'] <= pd.to_datetime(date_range[1])) &
-    (valid_results_df['ResultMeasureValue'].between(value_range[0], value_range[1]))
-]
+    selected_date_range = st.sidebar.date_input("Date Range", [date_min, date_max])
+    selected_value_range = st.sidebar.slider("Value Range", value_min, value_max, (value_min, value_max))
 
-# === Map of Selected Stations ===
-st.subheader("Map of Matching Stations")
-matching_stations = filtered['MonitoringLocationIdentifier'].unique()
-mapped_stations = stations[stations['MonitoringLocationIdentifier'].isin(matching_stations)]
+    # Filter data
+    filtered = subset[
+        (subset["ActivityStartDate"] >= pd.to_datetime(selected_date_range[0])) &
+        (subset["ActivityStartDate"] <= pd.to_datetime(selected_date_range[1])) &
+        (subset["ResultMeasureValue"].between(selected_value_range[0], selected_value_range[1]))
+    ]
 
-m = folium.Map(location=[37.5, -86.0], zoom_start=7)
-marker_cluster = MarkerCluster().add_to(m)
+    st.markdown("### Matching Stations Map")
+    matching_stations = filtered['MonitoringLocationIdentifier'].unique()
+    mapped_stations = stations[stations['MonitoringLocationIdentifier'].isin(matching_stations)]
 
-for _, row in mapped_stations.iterrows():
-    folium.Marker(
-        location=[row['Latitude'], row['Longitude']],
-        popup=row['MonitoringLocationName']
-    ).add_to(marker_cluster)
+    # Map
+    m = folium.Map(location=[37.5, -86], zoom_start=7)
+    marker_cluster = MarkerCluster().add_to(m)
 
-st_data = st_folium(m, width=700, height=500)
+    for _, row in mapped_stations.iterrows():
+        folium.Marker(
+            location=[row['Latitude'], row['Longitude']],
+            popup=row['MonitoringLocationName']
+        ).add_to(marker_cluster)
 
-# === Trend Plot ===
-st.subheader("Trend Plot")
+    st_data = st_folium(m, width=700, height=500)
 
-if selected_contaminants:
-    if len(selected_contaminants) == 1:
-        fig, ax = plt.subplots(figsize=(10, 5))
-        data = filtered[filtered['CharacteristicName'] == selected_contaminants[0]]
-        for station_id, group in data.groupby('MonitoringLocationIdentifier'):
-            ax.plot(group['ActivityStartDate'], group['ResultMeasureValue'], label=station_id)
-        ax.set_title(f"{selected_contaminants[0]} Over Time")
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Measured Value")
-        ax.legend(fontsize='small')
-        ax.grid(True)
-        st.pyplot(fig)
-
-    elif len(selected_contaminants) == 2:
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
-        for i, ax in enumerate([ax1, ax2]):
-            data = filtered[filtered['CharacteristicName'] == selected_contaminants[i]]
-            for station_id, group in data.groupby('MonitoringLocationIdentifier'):
-                ax.plot(group['ActivityStartDate'], group['ResultMeasureValue'], label=station_id)
-            ax.set_title(f"{selected_contaminants[i]} Over Time")
-            ax.set_xlabel("Date")
-            ax.set_ylabel("Measured Value")
-            ax.legend(fontsize='x-small')
-            ax.grid(True)
-        st.pyplot(fig)
-else:
-    st.info("Select at least one contaminant to generate a plot.")
+    # Trend plot
+    st.markdown("### Contaminant Trend Over Time")
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for station_id, group in filtered.groupby("MonitoringLocationIdentifier"):
+        ax.plot(group["ActivityStartDate"], group["ResultMeasureValue"], label=station_id)
+    ax.set_title(f"{selected_contaminant} Levels Over Time")
+    ax
