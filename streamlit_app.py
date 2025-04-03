@@ -34,10 +34,13 @@ max_date = results_df['ActivityStartDate'].max()
 date_range = st.date_input("Select date range:", [min_date, max_date])
 
 # Value range filter (only use numeric values)
-valid_values = results_df['ResultMeasureValue'].dropna()
-value_min = float(valid_values.min())
-value_max = float(valid_values.max())
-value_range = st.slider("Select value range:", value_min, value_max, (value_min, value_max))
+if not valid_results_df['ResultMeasureValue'].dropna().empty:
+    value_min = float(valid_results_df['ResultMeasureValue'].min())
+    value_max = float(valid_results_df['ResultMeasureValue'].max())
+else:
+    value_min = 0.0
+    value_max = 100.0  # fallback default
+
 
 # Filter data
 filtered = results_df[
