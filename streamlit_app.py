@@ -20,6 +20,9 @@ np.random.seed(42)
 stations['Latitude'] = np.random.uniform(36.5, 39.0, len(stations))
 stations['Longitude'] = np.random.uniform(-89.5, -84.5, len(stations))
 
+# Convert ResultMeasureValue to numeric early
+results_df['ResultMeasureValue'] = pd.to_numeric(results_df['ResultMeasureValue'], errors='coerce')
+
 # Contaminant selection
 contaminants = results_df['CharacteristicName'].dropna().unique()
 selected_contaminants = st.multiselect("Select up to 2 contaminants:", options=sorted(contaminants), max_selections=2)
@@ -30,9 +33,10 @@ min_date = results_df['ActivityStartDate'].min()
 max_date = results_df['ActivityStartDate'].max()
 date_range = st.date_input("Select date range:", [min_date, max_date])
 
-# Value range filter
-value_min = float(results_df['ResultMeasureValue'].min())
-value_max = float(results_df['ResultMeasureValue'].max())
+# Value range filter (only use numeric values)
+valid_values = results_df['ResultMeasureValue'].dropna()
+value_min = float(valid_values.min())
+value_max = float(valid_values.max())
 value_range = st.slider("Select value range:", value_min, value_max, (value_min, value_max))
 
 # Filter data
@@ -40,7 +44,7 @@ filtered = results_df[
     results_df['CharacteristicName'].isin(selected_contaminants) &
     (results_df['ActivityStartDate'] >= pd.to_datetime(date_range[0])) &
     (results_df['ActivityStartDate'] <= pd.to_datetime(date_range[1])) &
-    (pd.to_numeric(results_df['ResultMeasureValue'], errors='coerce').between(value_range[0], value_range[1]))
+    (results_df['ResultMeasureValue'].between(value_range[0], value_range[1]))
 ].dropna(subset=['ResultMeasureValue'])
 
 # Map
