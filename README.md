@@ -68,7 +68,7 @@ The AI model **ChatGPT-4** was used to generate all Python code and Streamlit lo
 
 [Deployed Streamlit App](https://organic-zebra-696gx7gjg492r5w9-8501.app.github.dev/)
 
-[GitHub Repository with Full Code]()
+[GitHub Repository with Full Code](https://github.com/faco229/Lab10/blob/main/streamlit_app.py)
 
 ## Discussion
 
