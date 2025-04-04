@@ -111,3 +111,11 @@ as cleaning, visualization, and app development. The use of AI to generate code 
 and more structured analysis, culminating in a working Streamlit app that enables dynamic
 exploration of water quality datasets. The final tool is a powerful foundation for future environmental
 monitoring apps or dashboards.
+
+
+## Links
+
+- [Live Streamlit App](https://organic-zebra-696gx7gjg492r5w9-8501.app.github.dev/)
+
+  
+- [View All AI Prompts (RESULTS_PROMPTS.md)](RESULTS_PROMPTS.md)
