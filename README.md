@@ -118,4 +118,3 @@ monitoring apps or dashboards.
 - [Live Streamlit App](https://organic-zebra-696gx7gjg492r5w9-8501.app.github.dev/)
 
   
-- [View All AI Prompts (RESULTS_PROMPTS.md)](RESULTS_PROMPTS.md)
