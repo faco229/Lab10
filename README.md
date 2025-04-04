@@ -76,6 +76,33 @@ Write a Streamlit app that:
 - Plots the measured contaminant values over time for each station
 
 
+## 🔹 Part 1 – Mapping Stations
+
+| Goal | Model | Prompt |
+|------|--------|--------|
+| Extract unique water quality monitoring stations from `station.csv` and display them on an interactive map. | ChatGPT-4 | `Write Python code to read a CSV file containing water quality monitoring stations using pandas, and extract a list of unique station identifiers and their names. Drop any duplicates and prepare the data for mapping.` |
+| Create an interactive map using Folium that shows station names and locations from the extracted dataset. | ChatGPT-4 | `Write Python code to create an interactive map of water monitoring stations using folium. Assume the stations have dummy latitude and longitude values generated within Kentucky. Add a marker for each unique station with a popup label showing the station name.` |
+
+---
+
+## 🔹 Part 2 – Plotting Contaminant Trends
+
+| Goal | Model | Prompt |
+|------|--------|--------|
+| Plot *Escherichia coli* levels over time using one line per monitoring station. | ChatGPT-4 | `Write Python code using pandas and matplotlib to:\n- Load a CSV of water quality data\n- Filter for a single contaminant (e.g., Escherichia coli)\n- Convert the date column to datetime format\n- Plot the contaminant values over time, using one line per station` |
+| Modify the previous plot function to allow displaying two different contaminants side-by-side in subplots. | ChatGPT-4 | `Update the existing plot function to support up to two contaminants. Each should have its own subplot. Use pandas and matplotlib to show trends over time per station for each contaminant.` |
+| Compare pH and Turbidity by plotting their average values across all stations over time in a single plot. | ChatGPT-4 | `Write Python code using pandas and matplotlib to plot two water quality characteristics (Turbidity and pH) over time on the same chart. Average the values across all stations for each date. Use one line per characteristic.` |
+
+---
+
+## 🔹 Part 3 – Streamlit App
+
+| Goal | Model | Prompt |
+|------|--------|--------|
+| Build a Streamlit web app that lets users upload both water quality datasets, select a contaminant, filter by date and value range, and display a map and trend graph based on the filtered data. | ChatGPT-4 | `Develop a streamlit app that allows the user to upload both data bases used in part 1 and part 2 (station.csv and narrowresult.csv), to search for a contaminant in the databases. Once the contaminant has been selected, you should be able to define the range of values and dates that you want to show. After modifying the ranges, update the map showing the location of the stations with the contaminant within that range and measured during the time frame. It should also show you a trend over time of the contaminant in all the stations shown.` |
+
+
+
 
 
 Conclusion:
