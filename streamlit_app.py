@@ -75,4 +75,11 @@ if station_file and results_file:
     for station_id, group in filtered.groupby("MonitoringLocationIdentifier"):
         ax.plot(group["ActivityStartDate"], group["ResultMeasureValue"], label=station_id)
     ax.set_title(f"{selected_contaminant} Levels Over Time")
-    ax
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Measured Value")
+    ax.legend(fontsize="x-small", bbox_to_anchor=(1.01, 1), loc="upper left")
+    ax.grid(True)
+    st.pyplot(fig)
+
+else:
+    st.info("Please upload both station.csv and narrowresult.csv to get started.")
