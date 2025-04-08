@@ -70,21 +70,21 @@ This is the code AI assisted in creating the app and debugging the code.
 To show the working code, the following image displays the web interface that is interactive for the user to view results for various contaminents:
 
 <p align="center">
-  <img src="" width="500">
+  <img src="https://github.com/faco229/Lab10/blob/main/app2.jpg" width="500">
   <br>
   <b>Figure 1:</b> App Prompt to upload files
 </p>
 
 <p align="center">
-  <img src="" width="500">
+  <img src="https://github.com/faco229/Lab10/blob/main/app1.jpg" width="500">
   <br>
   <b>Figure 2:</b> Files loaded on App & Map generated
 </p>
 
 <p align="center">
-  <img src="" width="500">
+  <img src="https://github.com/faco229/Lab10/blob/main/turbidity_ph_trend.png" width="500">
   <br>
-  <b>Figure 2:</b> Graph generated from files
+  <b>Figure 2:</b> Example graph generated from code
 </p>
 
 **Part 1 – Mapping Stations**
