@@ -152,4 +152,7 @@ This lab demonstrated how LLM-based prompt engineering can streamline data scien
 
 [8] Water Quality Portal. (n.d.). *National Water Quality Monitoring Council*. Retrieved from https://www.waterqualitydata.us/
 
+[9] OpenAI. (2024). *ChatGPT (April 3 version)* [Large language model]. https://chat.openai.com/
+
+
   
