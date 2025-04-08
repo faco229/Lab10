@@ -88,7 +88,7 @@ To show the working code, the following image displays the web interface that is
 </p>
 
 
-It is important to keep track of the prompts used to generate working coded. Below are the prompts this lab uses to code, debug, and upload necessary docuuments.
+It is important to keep track of the prompts used to generate working coded. Below are the prompts this lab uses to code, debug, and upload necessary documents.
 
 **Part 1 – Mapping Stations**
 
