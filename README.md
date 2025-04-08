@@ -34,23 +34,69 @@ Key steps included:
 
 The AI model **ChatGPT-4** was used to generate all Python code and Streamlit logic in an iterative, step-by-step format to meet all design requirements. Prompts were documented and formatted for reproducibility in the Results section.
 
+After completing development and testing of the Streamlit app in Visual Studio Code, the final program was committed and deployed using Git version control. This was done through the terminal by staging the application file using the command:
+
+**(1) git add streamlit_app.py**
+
+
+This tells Git to track changes made to the application file. Once staged, a commit was created using:
+
+
+
+
+**(2) git commit -m "Add final working Streamlit app with upload, filters, map, and trend plot"**
+
+
+This command saves a snapshot of the current changes with a descriptive message for reference. Finally, the commit was pushed to the remote repository on GitHub using:
+
+
+
+**(3) git push origin main**
+
+
+This action published the working version of the Streamlit app to the main branch of the GitHub repository. As a result, Streamlit Cloud automatically detected the update and re-deployed the web application using the new code.
+
+Copying (1), (2), & (3) into the terminal, under 'bash', will generate the app.
+
 ---
 
 ## Results
+The resulting code can be viewed by clicking the following link:
 
+[`streamlit_app.py`](https://github.com/faco229/Lab10/blob/main/streamlit_app.py)
 
+This is the code AI assisted in creating the app and debugging the code. 
 
+To show the working code, the following image displays the web interface that is interactive for the user to view results for various contaminents:
 
-## 🔹 Part 1 – Mapping Stations
+<p align="center">
+  <img src="" width="500">
+  <br>
+  <b>Figure 1:</b> App Prompt to upload files
+</p>
+
+<p align="center">
+  <img src="" width="500">
+  <br>
+  <b>Figure 2:</b> Files loaded on App & Map generated
+</p>
+
+<p align="center">
+  <img src="" width="500">
+  <br>
+  <b>Figure 2:</b> Graph generated from files
+</p>
+
+**Part 1 – Mapping Stations**
 
 | Goal | Model | Prompt |
 |------|--------|--------|
 | Extract unique water quality monitoring stations from `station.csv` and display them on an interactive map. | ChatGPT-4 | `Write Python code to read a CSV file containing water quality monitoring stations using pandas, and extract a list of unique station identifiers and their names. Drop any duplicates and prepare the data for mapping.` |
 | Create an interactive map using Folium that shows station names and locations from the extracted dataset. | ChatGPT-4 | `Write Python code to create an interactive map of water monitoring stations using folium. Assume the stations have dummy latitude and longitude values generated within Kentucky. Add a marker for each unique station with a popup label showing the station name.` |
 
----
 
-## 🔹 Part 2 – Plotting Contaminant Trends
+
+**Part 2 – Plotting Contaminant Trends**
 
 | Goal | Model | Prompt |
 |------|--------|--------|
@@ -58,9 +104,8 @@ The AI model **ChatGPT-4** was used to generate all Python code and Streamlit lo
 | Modify the previous plot function to allow displaying two different contaminants side-by-side in subplots. | ChatGPT-4 | `Update the existing plot function to support up to two contaminants. Each should have its own subplot. Use pandas and matplotlib to show trends over time per station for each contaminant.` |
 | Compare pH and Turbidity by plotting their average values across all stations over time in a single plot. | ChatGPT-4 | `Write Python code using pandas and matplotlib to plot two water quality characteristics (Turbidity and pH) over time on the same chart. Average the values across all stations for each date. Use one line per characteristic.` |
 
----
 
-## 🔹 Part 3 – Streamlit App
+**Part 3 – Streamlit App**
 
 | Goal | Model | Prompt |
 |------|--------|--------|
