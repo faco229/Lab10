@@ -34,7 +34,7 @@ Key steps included:
 
 The AI model **ChatGPT-4** was used to generate all Python code and Streamlit logic in an iterative, step-by-step format to meet all design requirements. Prompts were documented and formatted for reproducibility in the Results section.
 
-After completing development and testing of the Streamlit app in Visual Studio Code, the final program was committed and deployed using Git version control. This was done through the terminal by staging the application file using the command:
+After completing development and testing of the Streamlit app in Visual Studio Code, the final program was committed and deployed using Git version control. This was done through the terminal by staging the application file using the commands:
 
 **(1) git add streamlit_app.py**
 
@@ -56,7 +56,7 @@ This command saves a snapshot of the current changes with a descriptive message 
 
 This action published the working version of the Streamlit app to the main branch of the GitHub repository. As a result, Streamlit Cloud automatically detected the update and re-deployed the web application using the new code.
 
-Copying (1), (2), & (3) into the terminal, under 'bash', will generate the app.
+Copying (1), (2), & (3) into the terminal, under 'bash', will generate the app and import the necessary files. Once these three are in the command terminal, reload Streamlit and explore the completed app. 
 
 ---
 
@@ -86,6 +86,9 @@ To show the working code, the following image displays the web interface that is
   <br>
   <b>Figure 2:</b> Example graph generated from code
 </p>
+
+
+It is important to keep track of the prompts used to generate working coded. Below are the prompts this lab uses to code, debug, and upload necessary docuuments.
 
 **Part 1 – Mapping Stations**
 
